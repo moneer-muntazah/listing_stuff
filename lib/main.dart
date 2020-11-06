@@ -45,9 +45,7 @@ class MyApp extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Builder(builder: (ctx) {
-            final size = MediaQuery
-                .of(ctx)
-                .size;
+            final size = MediaQuery.of(ctx).size;
             // return WrapperExample(
             //   children: List.generate(500, (i) {
             //     return Container(
@@ -62,7 +60,33 @@ class MyApp extends StatelessWidget {
             //     );
             //   }),
             // );
-            // return GridViewExample(
+            return GridViewExample(
+              children: List.generate(500, (i) {
+                return LayoutBuilder(
+                  builder: (context, constraint) {
+                    print(constraint.maxHeight);
+                    return Container(
+                        color: colors[random.nextInt(colors.length)],
+                        width: (size.width - 24) / 2,
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              color: Colors.black,
+                              height: constraint.maxHeight * 0.5,
+                            ),
+                            MyListTile(
+                              title: faker.person.name(),
+                              subtitle: faker.lorem.sentence(),
+                              count: (i) => builds += i,
+                            ),
+                          ],
+                        )
+                    );
+                  }
+                );
+              }),
+            );
+            // return ListViewExample(
             //   children: List.generate(500, (i) {
             //     return Container(
             //       color: colors[random.nextInt(colors.length)],
@@ -76,20 +100,6 @@ class MyApp extends StatelessWidget {
             //     );
             //   }),
             // );
-            return ListViewExample(
-              children: List.generate(500, (i) {
-                return Container(
-                  color: colors[random.nextInt(colors.length)],
-                  width: (size.width - 24) / 2,
-                  margin: const EdgeInsets.only(bottom: 8),
-                  child: MyListTile(
-                    title: faker.person.name(),
-                    subtitle: faker.lorem.sentence(),
-                    count: (i) => builds += i,
-                  ),
-                );
-              }),
-            );
           }),
         ),
       ),
@@ -101,15 +111,14 @@ class MyListTile extends StatelessWidget {
   final String title, subtitle;
   final Function(int) count;
 
-  MyListTile({@required this.title, @required this.subtitle,
-  this.count});
+  MyListTile({@required this.title, @required this.subtitle, this.count});
 
   @override
   Widget build(BuildContext context) {
     count(1);
     return ListTile(
       title: Text(title),
-      subtitle: Text(title),
+      subtitle: Text(subtitle),
     );
   }
 }
