@@ -4,6 +4,7 @@ import 'package:faker/faker.dart';
 import 'wrapper.dart';
 import 'grid_view.dart';
 import 'list_view.dart';
+import 'staggered_package.dart';
 
 void main() {
   runApp(MyApp());
@@ -60,32 +61,32 @@ class MyApp extends StatelessWidget {
             //     );
             //   }),
             // );
-            return GridViewExample(
-              children: List.generate(500, (i) {
-                return LayoutBuilder(
-                  builder: (context, constraint) {
-                    print(constraint.maxHeight);
-                    return Container(
-                        color: colors[random.nextInt(colors.length)],
-                        width: (size.width - 24) / 2,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              color: Colors.black,
-                              height: constraint.maxHeight * 0.5,
-                            ),
-                            MyListTile(
-                              title: faker.person.name(),
-                              subtitle: faker.lorem.sentence(),
-                              count: (i) => builds += i,
-                            ),
-                          ],
-                        )
-                    );
-                  }
-                );
-              }),
-            );
+            // return GridViewExample(
+            //   children: List.generate(500, (i) {
+            //     return LayoutBuilder(
+            //       builder: (context, constraint) {
+            //         print(constraint.maxHeight);
+            //         return Container(
+            //             color: colors[random.nextInt(colors.length)],
+            //             width: (size.width - 24) / 2,
+            //             child: Column(
+            //               children: <Widget>[
+            //                 Container(
+            //                   color: Colors.black,
+            //                   height: constraint.maxHeight * 0.5,
+            //                 ),
+            //                 MyListTile(
+            //                   title: faker.person.name(),
+            //                   subtitle: faker.lorem.sentence(),
+            //                   count: (i) => builds += i,
+            //                 ),
+            //               ],
+            //             )
+            //         );
+            //       }
+            //     );
+            //   }),
+            // );
             // return ListViewExample(
             //   children: List.generate(500, (i) {
             //     return Container(
@@ -100,6 +101,27 @@ class MyApp extends StatelessWidget {
             //     );
             //   }),
             // );
+            return StaggeredGridViewExample(
+              children: List.generate(500, (i) {
+                return Container(
+                    color: colors[random.nextInt(colors.length)],
+                    // width: (size.width - 24) / 2,
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          color: Colors.black,
+                          height: 75,
+                        ),
+                        MyListTile(
+                          title: faker.person.name(),
+                          subtitle: faker.lorem.sentence(),
+                          count: (i) => builds += i,
+                        ),
+                      ],
+                    )
+                );
+              }),
+            );
           }),
         ),
       ),
