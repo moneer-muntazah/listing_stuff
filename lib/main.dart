@@ -1,6 +1,10 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:faker/faker.dart';
+
+/// In production project, use the builder constructor when possible to
+/// create objects lazily.
+
 import 'wrapper.dart';
 import 'grid_view.dart';
 import 'list_view.dart';
@@ -87,6 +91,35 @@ class MyApp extends StatelessWidget {
             //     );
             //   }),
             // );
+            return GridViewExample(
+              children: List.generate(500, (i) {
+                return Container(
+                  color: colors[random.nextInt(colors.length)],
+                  // width: (size.width - 24) / 2,
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          color: Colors.black,
+                          child: Container(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: MyListTile(
+                          title: faker.person.name(),
+                          subtitle: faker.lorem.sentence(),
+                          count: (i) => builds += i,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            );
             // return ListViewExample(
             //   children: List.generate(500, (i) {
             //     return Container(
@@ -101,27 +134,27 @@ class MyApp extends StatelessWidget {
             //     );
             //   }),
             // );
-            return StaggeredGridViewExample(
-              children: List.generate(500, (i) {
-                return Container(
-                    color: colors[random.nextInt(colors.length)],
-                    // width: (size.width - 24) / 2,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          color: Colors.black,
-                          height: 75,
-                        ),
-                        MyListTile(
-                          title: faker.person.name(),
-                          subtitle: faker.lorem.sentence(),
-                          count: (i) => builds += i,
-                        ),
-                      ],
-                    )
-                );
-              }),
-            );
+            // return StaggeredGridViewExample(
+            //   children: List.generate(500, (i) {
+            //     return Container(
+            //         color: colors[random.nextInt(colors.length)],
+            //         // width: (size.width - 24) / 2,
+            //         child: Column(
+            //           children: <Widget>[
+            //             Container(
+            //               color: Colors.black,
+            //               height: 75,
+            //             ),
+            //             MyListTile(
+            //               title: faker.person.name(),
+            //               subtitle: faker.lorem.sentence(),
+            //               count: (i) => builds += i,
+            //             ),
+            //           ],
+            //         )
+            //     );
+            //   }),
+            // );
           }),
         ),
       ),
@@ -139,8 +172,8 @@ class MyListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     count(1);
     return ListTile(
-      title: Text(title),
-      subtitle: Text(subtitle),
+      title: Text(title, maxLines: 1),
+      subtitle: Text(subtitle, maxLines: 2),
     );
   }
 }
