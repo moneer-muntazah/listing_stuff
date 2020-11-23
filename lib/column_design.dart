@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class WrapperExample extends StatelessWidget {
+class ColumnExample extends StatelessWidget {
   final List<Widget> children;
 
-  WrapperExample({this.children});
+  ColumnExample({this.children});
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Wrap(
+      child: Column(
         // alignment: WrapAlignment.center,
         //crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 8,
+        // spacing: 8,
         children: children,
       ),
     );

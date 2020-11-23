@@ -6,31 +6,31 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 /// In production project, use the builder constructor when possible to
 /// create objects lazily.
 
-import 'wrapper.dart';
+import 'column_design.dart';
 import 'grid_view.dart';
 import 'list_view.dart';
 import 'staggered_package.dart';
+
+final faker = Faker();
+final colors = <Color>[
+  Colors.greenAccent,
+  Colors.amber,
+  Colors.black12,
+  Colors.indigoAccent,
+  Colors.brown,
+  Colors.cyan,
+  Colors.blueAccent,
+  Colors.pinkAccent,
+  Colors.teal,
+  Colors.deepPurple,
+];
+final random = math.Random();
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final faker = Faker();
-  final colors = <Color>[
-    Colors.greenAccent,
-    Colors.amber,
-    Colors.black12,
-    Colors.indigoAccent,
-    Colors.brown,
-    Colors.cyan,
-    Colors.blueAccent,
-    Colors.pinkAccent,
-    Colors.teal,
-    Colors.deepPurple,
-  ];
-  final random = math.Random();
-
   @override
   Widget build(BuildContext context) {
     var builds = 0;
@@ -52,20 +52,25 @@ class MyApp extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Builder(builder: (ctx) {
             final size = MediaQuery.of(ctx).size;
-            // return WrapperExample(
-            //   children: List.generate(500, (i) {
-            //     return Container(
-            //       color: colors[random.nextInt(colors.length)],
-            //       width: (size.width - 24) / 2,
-            //       margin: const EdgeInsets.only(bottom: 8),
-            //       child: MyListTile(
-            //         title: faker.person.name(),
-            //         subtitle: faker.lorem.sentence(),
-            //         count: (i) => builds += i,
-            //       ),
-            //     );
-            //   }),
-            // );
+            return ColumnExample(
+              children: List.generate(500, (i) {
+                return Builder(
+                  builder: (ctx) {
+                    print(i);
+                    return Container(
+                      color: colors[random.nextInt(colors.length)],
+                      width: (size.width - 24) / 2,
+                      margin: const EdgeInsets.only(bottom: 8),
+                      child: MyListTile(
+                        title: faker.person.name(),
+                        subtitle: faker.lorem.sentence(),
+                        count: (i) => builds += i,
+                      ),
+                    );
+                  }
+                );
+              }),
+            );
             // return GridViewExample(
             //   children: List.generate(500, (i) {
             //     return LayoutBuilder(
@@ -217,40 +222,75 @@ class MyApp extends StatelessWidget {
             //       return container;
             //     });
 
-            return GridView.builder(
-                itemCount: 5000,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1 / 2.12,
-                ),
-                itemBuilder: (_, i) {
-                  final container = Container(
-                    color: colors[random.nextInt(colors.length)],
-                    width: (size.width - 24) / 2,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          color: Colors.black,
-                          height: 75,
-                        ),
-                        MyListTile(
-                          title: faker.person.name(),
-                          subtitle: faker.lorem.sentence(),
-                          count: (i) => builds += i,
-                        ),
-                      ],
-                    ),
-                  );
-                  if (i == 0) {
-                    return Builder(builder: (ctx) {
-                      print("first container built");
-                      return container;
-                    });
-                  }
-                  return container;
-                });
+            // return GridView.builder(
+            //     itemCount: 5000,
+            //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //       crossAxisCount: 2,
+            //       childAspectRatio: 1 / 2.12,
+            //     ),
+            //     itemBuilder: (_, i) {
+            //       // final container = Container(
+            //       //   color: colors[random.nextInt(colors.length)],
+            //       //   width: (size.width - 24) / 2,
+            //       //   child: Column(
+            //       //     children: <Widget>[
+            //       //       Container(
+            //       //         color: Colors.black,
+            //       //         height: 75,
+            //       //       ),
+            //       //       MyListTile(
+            //       //         title: faker.person.name(),
+            //       //         subtitle: faker.lorem.sentence(),
+            //       //         count: (i) => builds += i,
+            //       //       ),
+            //       //     ],
+            //       //   ),
+            //       // );
+            //       final container = TestContainer(
+            //         width: (size.width - 24) / 2,
+            //         count: (i) => builds += i,
+            //       );
+            //       if (i == 0) {
+            //         return Builder(builder: (ctx) {
+            //           print("first container built");
+            //           return container;
+            //         });
+            //       }
+            //       return container;
+            //     });
           }),
         ),
+      ),
+    );
+  }
+}
+
+class TestContainer extends StatelessWidget {
+  final int number;
+  final double width;
+  final Function(int) count;
+
+  TestContainer({@required this.number, @required this.width, this.count}) {
+    print("constructed $number");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: colors[random.nextInt(colors.length)],
+      width: width,
+      child: Column(
+        children: <Widget>[
+          Container(
+            color: Colors.black,
+            height: 75,
+          ),
+          MyListTile(
+            title: faker.person.name(),
+            subtitle: faker.lorem.sentence(),
+            count: count,
+          ),
+        ],
       ),
     );
   }
